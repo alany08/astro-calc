@@ -152,6 +152,21 @@ def calculate_distance(flux_F, luminosity_L):
         
     distance = math.sqrt(luminosity_L / (4 * math.pi * flux_F))
     return distance
+
+def roche_lobe_distance(R, rho_primary, rho_object):
+    """
+    Calculate the Roche-lobe distance.
+    
+    Parameters:
+        R (float): Radius of the primary body (in same length units you want d returned in)
+        rho_primary (float): Density of the primary body
+        rho_object (float): Density of the orbiting object
+        
+    Returns:
+        float: Roche-lobe distance d
+    """
+    return 2.4 * R * (rho_primary / rho_object) ** (1/3)
+
 exports = {
     "stefan_boltzmann": {
         "cb": stefan_boltzmann,
