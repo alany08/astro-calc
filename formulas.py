@@ -1,3 +1,10 @@
+import math
+G = 6.674e-11  # Newtonian constant of gravitation (m^3 kg^-1 s^-2)
+c = 3.0e8    # Speed of light (m/s)
+M_sun = 1.989e30 # Solar mass (kg)
+H0_default = 70.0 # Default Hubble constant (km/s/Mpc) - note units for Hubble's law function
+pc = 3.08567758e16 # Parsec (m)
+Mpc = pc * 1e6 # Megaparsec (m)
 def _stefan_boltzmann(T, emissivity=1.0):
     STEFAN_BOLTZMANN_CONSTANT = 5.670374419e-8
     """
@@ -48,7 +55,36 @@ def distance_modulus(m=None, M=None, d=None):
         return M + 5 * math.log10(d) - 5
     else:
         raise ValueError("Provide exactly two of: m, M, and d (in parsecs).")
+        
+def schwarzschild_radius(mass):
+    """
+    Calculates the Schwarzschild radius for a given mass.
 
+    Args:
+        mass (float): The mass of the object (in kg).
+
+    Returns:
+        float: The Schwarzschild radius (in meters).
+    """
+    """ !!!!ADD CONSTANTS AS VARIABLES, G IS 6.674e-11!!!!"""
+    return 2 * G * mass / c**2
+
+def orbital_period_kepler(semimajor_axis, m1, m2):
+    """
+    Calculates the orbital period using Newton's form of Kepler's Third Law.
+
+    Args:
+        semimajor_axis (float): The semi-major axis of the orbit (in meters).
+        m1 (float): Mass of the first object (in kg).
+        m2 (float): Mass of the second object (in kg).
+
+    Returns:
+        float: The orbital period (in seconds).
+    """
+    # P^2 = (4 * pi^2 * a^3) / (G * (m1 + m2))
+    period_squared = (4 * math.pi**2 * semimajor_axis**3) / (G * (m1 + m2))
+    return math.sqrt(period_squared)
+    
 exports = {
     "stefan_boltzmann": {
         "cb": stefan_boltzmann,
