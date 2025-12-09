@@ -257,7 +257,7 @@ def _convert_and_print(qty_str):
 exports = {
     "convert_units": {
         "cb": convert_and_print,
-        "desc": "Converts arbitrary units",
+        "desc": "Converts arbitrary units. Takes a single argument: input value with units (no spaces)",
         "aliases": ["convert", "conv", "units"],
     }
 }
