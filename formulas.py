@@ -84,7 +84,74 @@ def orbital_period_kepler(semimajor_axis, m1, m2):
     # P^2 = (4 * pi^2 * a^3) / (G * (m1 + m2))
     period_squared = (4 * math.pi**2 * semimajor_axis**3) / (G * (m1 + m2))
     return math.sqrt(period_squared)
-    
+
+def calculate_redshift_z(observed_wavelength, rest_wavelength):
+    """
+    Calculates the relativistic redshift parameter (z).
+    Wavelengths must be in the same unit (e.g., meters, Angstroms, nm).
+    """
+    z = (observed_wavelength - rest_wavelength) / rest_wavelength
+    return z
+
+def calculate_velocity_from_redshift(z):
+    """
+    Calculates the velocity (v) from the redshift parameter (z) using 
+    the relativistic formula. Velocity is in meters per second (m/s).
+    """
+    # Formula: v = c * (((1+z)^2 - 1) / ((1+z)^2 + 1))
+    v = c * (((1 + z)**2 - 1) / ((1 + z)**2 + 1))
+    return v
+def calculate_vis_viva_velocity(distance_r, semi_major_axis_a, central_mass_M):
+    """
+    Calculates the orbital velocity (v) using the Vis-viva equation.
+    Uses SI units:
+    distance_r (meters), semi_major_axis_a (meters), 
+    central_mass_M (kilograms).
+    Returns velocity in meters per second (m/s).
+    """
+    # Formula: v^2 = GM * (2/r - 1/a)
+    # v = sqrt(GM * (2/r - 1/a))
+    v_squared = G * central_mass_M * ((2 / distance_r) - (1 / semi_major_axis_a))
+    if v_squared < 0:
+        # This condition usually implies an unbound (hyperbolic) orbit, 
+        # or incorrect input values for a bound orbit.
+        raise ValueError("Calculation resulted in a negative v^2. Check input parameters for a bound orbit.")
+        
+    v = math.sqrt(v_squared)
+    return v
+
+def calculate_flux(luminosity_L, distance_d):
+    """
+    Calculates apparent flux (F) given luminosity (L) and distance (d).
+    Luminosity must be in Watts (W), distance in meters (m).
+    Returns flux in Watts per square meter (W/m^2).
+    """
+    # Formula: F = L / (4 * pi * d^2)
+    flux = luminosity_L / (4 * math.pi * distance_d**2)
+    return flux
+
+def calculate_luminosity(flux_F, distance_d):
+    """
+    Calculates intrinsic luminosity (L) given apparent flux (F) and distance (d).
+    Flux in W/m^2, distance in meters (m).
+    Returns luminosity in Watts (W).
+    """
+    # Formula: L = F * (4 * pi * d^2)
+    luminosity = flux_F * (4 * math.pi * distance_d**2)
+    return luminosity
+
+def calculate_distance(flux_F, luminosity_L):
+    """
+    Calculates distance (d) given apparent flux (F) and luminosity (L).
+    Flux in W/m^2, luminosity in Watts (W).
+    Returns distance in meters (m).
+    """
+    # Formula: d = sqrt(L / (4 * pi * F))
+    if flux_F <= 0:
+        raise ValueError("Flux must be positive to calculate a valid distance.")
+        
+    distance = math.sqrt(luminosity_L / (4 * math.pi * flux_F))
+    return distance
 exports = {
     "stefan_boltzmann": {
         "cb": stefan_boltzmann,
